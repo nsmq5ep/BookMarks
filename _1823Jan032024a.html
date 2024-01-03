@@ -1,0 +1,135 @@
+<html>
+<head>
+  <title>Bookmark List</title>
+  <style id="theme">
+    /* Add CSS for aesthetics */
+    /* Add CSS for aesthetics */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #fff;
+      color: #000;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    li {
+      margin: 10px;
+      flex-grow: 1;
+      text-align: center;
+    }
+    a {
+      color: #3366cc;
+      text-decoration: none;
+      font-size: 18px;
+      display: block;
+      padding: 10px;
+      border: 1px solid #3366cc;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    a:hover {
+      background-color: #3366cc;
+      color: #fff;
+    }
+    #themeButton {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #000;
+      border: none;
+      cursor: pointer;
+    }
+    #downloadButton {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #000;
+      border: none;
+      cursor: pointer;
+    }
+    #controlPanel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+  <script>
+    // Use jQuery to handle interactions and dynamic behavior
+    $(document).ready(function() {
+      // Add event listener for theme toggle button
+      $('#themeButton').click(function() {
+        var theme = $('#theme').html();
+        if (theme.includes('#3366cc')) {
+          $('#theme').html(theme.replace(/#3366cc/g, '#ff0000'));
+        } else {
+          $('#theme').html(theme.replace(/#ff0000/g, '#3366cc'));
+        }
+      });
+
+      // Add event listener for file input
+      $('#fileInput').change(function(e) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var data = new Uint8Array(e.target.result);
+          var workbook = XLSX.read(data, {type: 'array'});
+
+          var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          var jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+
+          jsonData.shift(); // Remove the first row
+
+          jsonData.forEach(function(row) {
+            $('ul').append('<li><a target="_blank" href="' + row[1] + '">' + row[0] + '</a></li>');
+          });
+        };
+        reader.readAsArrayBuffer(e.target.files[0]);
+      });
+
+      // Add event listener for download button
+      $('#downloadButton').click(function() {
+        $('#fileInput').hide(); // Hide the file input button in the downloaded version
+        var $clone = $('html').clone();
+        $clone.find('#controlPanel').remove();
+        var pageHtml = '<html>\n' + $clone.html() + '\n</html>';
+        pageHtml = pageHtml.replace(/<button id="fileInput".*?<\/button>/, '') // Remove file input
+          .replace(/<button id="themeButton".*?<\/button>/, '') // Remove theme button
+          .replace(/<a target="_blank" href="/g, '<a target="_blank" href="') // Make links open in a new tab
+          .replace(/<button id="downloadButton".*?<\/button>/, ''); // Remove download button
+        var blob = new Blob([pageHtml], {type: 'text/html'});
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'bookmarks.html';
+        link.click();
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>Bookmarks</h1>
+  
+  
+  <input type="file" id="fileInput" accept=".xlsx" style="display: none;">
+  <ul>
+    <!-- Links will be generated here -->
+  <li><a target="_blank" href="https://studio.harperdb.io/o/e19d5d82/i/compute-stack-e19d5d82-1699358473180/browse/taskloggerdb/tasks">Studio :: HarperDB</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=fwjJbqbr1_o&amp;t=360s">part 1 | how to play "Samba Pa Ti" on guitar by Carlos Santana | electric guitar lesson tutorial - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=YJxoskfl_MU">Convert Any language video to English with AI overdub - it will even copy your voice - YouTube</a></li><li><a target="_blank" href="https://www.facebook.com/reel/235167236230264">vocalremover</a></li><li><a target="_blank" href="https://www.facebook.com/reel/1749580978797827">pictorybot</a></li><li><a target="_blank" href="https://www.google.com/search?q=online+metronome&amp;oq=online+metronome&amp;gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIGCAEQRRhB0gENMTUyMDA0NzkzajBqMagCALACAA&amp;sourceid=chrome&amp;ie=UTF-8#cobssid=s">online metronome - Google Search</a></li><li><a target="_blank" href="https://violinspiration.com/free-online-metronome-subdivisions/">Free Online Metronome - Violinspiration</a></li><li><a target="_blank" href="https://poe.com/GPT-4-32k">Poe - GPT-4-32k</a></li><li><a target="_blank" href="https://www.facebook.com/reel/201933682889427">musicfy</a></li><li><a target="_blank" href="https://andisearch.com/">Andi - Search for the next generation</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/dlIkexwGpNg">Port Forwarding - vscode</a></li><li><a target="_blank" href="https://www.amazon.in/Dulhan-PATTERN-SHOULDER-SHEMAGH-KEFFIYEH/dp/B08L9F4FTX">Buy Dulhan SMALL CHECKS PATTERN UNISEX Cotton DESERT SCARF/BIG SHOULDER RUMAAL/Scarf for neck/MUSLIM SHOULDER RUMAAL/SHEMAGH/KEFFIYEH (Black and White) at Amazon.in</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=-TM9foEQJ-Q">Why Musicians Are Broke and How to Fix It - YouTube</a></li><li><a target="_blank" href="edge://newtab/">New tab</a></li><li><a target="_blank" href="https://www.facebook.com/reel/1508015909947332">canva thumbnail</a></li><li><a target="_blank" href="https://www.facebook.com/reel/230887606514672">legato</a></li><li><a target="_blank" href="https://www.facebook.com/reel/303372845940073">comic business</a></li><li><a target="_blank" href="https://www.digitalsamaritan.co/">digitalSamaritan | Home</a></li><li><a target="_blank" href="https://www.facebook.com/reel/1734894496924010">nice arpeggio</a></li><li><a target="_blank" href="https://www.facebook.com/reel/1523260958512498">money ai</a></li><li><a target="_blank" href="https://www.img2go.com/convert/png-to-ico">Convert PNG To ICO Online - Online ICO converter</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=rA_7wmPG_bg">How to DOMINATE Minecraft PvP! (1.9-1.20) - YouTube</a></li><li><a target="_blank" href="https://chatllama.baseten.co/?utm_source=digitalSamaritan&amp;utm_medium=website&amp;utm_campaign=digitalSamaritan">ChatLLaMA – A ChatGPT style chatbot for Facebook's LLaMA</a></li><li><a target="_blank" href="https://poe.com/chat/2qts2oa6slnl6b737ez">Poe - Challenging Practice</a></li><li><a target="_blank" href="https://sidebarclone01.vercel.app/outBoxPrompt.html">sidebarclone01.vercel.app/outBoxPrompt.html</a></li><li><a target="_blank" href="https://sidebarclone01.vercel.app/iconsCopy.html">sidebarclone01.vercel.app/iconsCopy.html</a></li><li><a target="_blank" href="https://pastelink.net/t60qqrf9">guiarist day prompt</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=kFCvltNaA9Q">Top 5 Minecraft Bedwars Servers - YouTube</a></li><li><a target="_blank" href="https://poe.com/">Poe</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/kSghgdKQad8">The POWER of perception - How to use your mind to create reality (Manifestation) - YouTube</a></li><li><a target="_blank" href="https://ytubetool.com/tools/youtube-title-and-description-extractor">YouTube Title and Description Extractor - YTubeTool</a></li><li><a target="_blank" href="https://www.amazon.in/IBA-ISBA-COLLECTIONS-Womens-Crinkle/dp/B0C41F1ZJY/ref=sr_1_29?crid=1A0GE6WQDZAWV&amp;keywords=hijab&amp;qid=1700720672&amp;sprefix=hija%2Caps%2C309&amp;sr=8-29&amp;th=1">Buy IBA ISBA COLLECTIONS Women's Crinkle Cotton Scarf, Stoles, Hijab (80 x 190 Cms) (Maroon) at Amazon.in</a></li><li><a target="_blank" href="https://ibb.co/gSF7WzJ">karan-sabji-QR-code</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=yAmTz4xtWss">This BLEW ME AWAY! - True AI Music Has Arrived &amp; it's FREE! - YouTube</a></li><li><a target="_blank" href="https://www.patreon.com/posts/40974538">TOP 15 BLUES GUITARISTS OF ALL TIME!! | Patreon</a></li><li><a target="_blank" href="https://courses.benhigginsofficial.com/membership">The Complete Guitarist Membership</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=l1DnE-I0c_A">How to Improvise - How to Play Jamey Aebersold Volume 1 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=BgRzzvVWBrU">The Blues Scale (Minor Pentatonic) and the Major Pentatonic Scales on the Guitar - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=CYGdOTqR-Dk">Single Chord Backing Track in E Minor - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=39Ne0D-1Qbg">Little Angel Child - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/channel/UCEXDaXzYhqYdLCQ3Ce7U2Og">Quist - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=BlDdmGg8HbE">Simple ways to improve your blues phrasing when improvising on guitar - Blues guitar lesson EP420 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=MZEdA7Hwd9Q">Statesboro Blues Guitar Lesson Part 1- Intro Slide Solo - Duane Allman Style Guitar Lesson - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=G-RdPl1oEIY">Statesboro Blues - Allman Brothers - Guitar Lesson With Tabs - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=VnNICpmJmk4&amp;list=PL1RR2V7cJpjQjh19WZrhGuVHfEs-h6InO&amp;index=14">Blues Masters 17 - More Post Modern Blues [Full Album] - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=Y3B8spSOkJw">The 'Trick' to TRAVIS PICKING Learn it in 10 Minutes! - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=SkHNF33pmEU">FREE Course: How to Play Ambient Guitar - YouTube</a></li><li><a target="_blank" href="http://146.19.24.47:8000/hash/464aa0c11ed153fcbe649aade562f5d043de008e.html">LL - Danny Gill's Blues licks for absolute beginners [DVDRip] -移花宫-武林禁地，闲人禁止入内</a></li><li><a target="_blank" href="http://146.19.24.47:8000/hash/14f69f3375a87b29cdb43ca2a99a1eec72b4b492.html">[DVDRip] LL - Blues Guitar for Absolute Beginners -移花宫-武林禁地，闲人禁止入内</a></li><li><a target="_blank" href="https://pastelink.net/yfdz2utx">guitarist day prompts world</a></li><li><a target="_blank" href="https://www.facebook.com/groups/thebluesclubs/">The Blues Club | Facebook</a></li><li><a target="_blank" href="https://aitoolheaven.com/">AiToolHeaven - The Ultimate List of Ai Tools and Resources</a></li><li><a target="_blank" href="https://truefire.com/play-blues-guitar/1-quick-start-for-beginners/practice-session-13/v34562">Practice Session 13 - Playalong: Slow - TrueFire</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=Mezbpkx9CAA&amp;list=PLimjwdKLMwP1qXqWnmXOvOI2jHmayOxUu">Chicago Blues jam by yourself on guitar! - Includes TAB on Screen - Guitar Lesson - EP543 - YouTube</a></li><li><a target="_blank" href="https://www.instagram.com/nevillejmartin/?hl=en">Neville James Martin Guitar (@nevillejmartin) • Instagram photos and videos</a></li><li><a target="_blank" href="https://tomovhxtv.vhx.tv/checkout/subscribe/purchase?return_to=https%3A%2F%2Ftomovhxtv.vhx.tv%2Ffoundation-core-music-lessons">Tomo Fujita Guitar Wisdom</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=94OlalTbtb0">Top10 Tips! (to make you a better player) - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=75NaHNBtgw0">EA Cricket Games Ultimate Fix - YouTube</a></li><li><a target="_blank" href="https://i.imgur.com/hMDN52p.jpg">AyaanshSyllabusMaths</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=Kmvxhe6FnqU">How To Improvise Blues: Beginner Lesson 1 - YouTube</a></li><li><a target="_blank" href="file:///D:/temptextfiles/xk86gwsr7n.html">AyaanshEVS</a></li><li><a target="_blank" href="https://bitsearch.to/">New Generation Torrent Search Engine | Bitsearch</a></li><li><a target="_blank" href="https://www.episodate.com/tv-show/masterchef-india?season=8">MasterChef India Season 8 Air Dates &amp; Countdown</a></li><li><a target="_blank" href="file:///D:/temptextfiles/p1h7wzt2xo.html">papa pin</a></li><li><a target="_blank" href="https://truefire.com/blues-guitar-lessons/shades-of-blues/c1694">Color Up Your Blues Solos with 10 Creative &amp; Harmonic Approaches</a></li><li><a target="_blank" href="https://sidebarclone01.vercel.app/EminorScaleHelper.html">sidebarclone01.vercel.app/EminorScaleHelper.html</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=HdU_rf7eMTI">Math Antics - Long Division with 2-Digit Divisors - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=XwYAD44T9C0">Thanks Stability Video! No More ComfyUI Fear! - YouTube</a></li><li><a target="_blank" href="https://truefire.com/blues-guitar-lessons/blues-alchemy/slo-blues-solo-breakdown/v6387">Slo Blues - Solo Breakdown - TrueFire</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=Qd8pyJ9A5W8">HOW TO VISUALIZE CHORDS &amp; SCALES: A simple, step-by-step method - YouTube</a></li><li><a target="_blank" href="https://www.shorturl.at/">URL Shortener</a></li><li><a target="_blank" href="https://em-pent23120419.vercel.app/EmPent23120419.html">em-pent23120419.vercel.app/EmPent23120419.html</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=yutOBsZH5_0">Playing over the Changes of a Slow Blues in G | Intermediate Blues Guitar Lesson - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=_kK1_apm-qs">Land on THESE notes when improvising lead guitar - Guitar Lesson - EP527 - YouTube</a></li><li><a target="_blank" href="https://bitsearch.to/anime/xxxholic-dub">Watch xxxHOLiC (Dub) Online | Bitsearch</a></li><li><a target="_blank" href="https://fretboardknowledge.com/guitar/kb/em/">The E Minor Triad - Fretboard Knowledge</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=DOL-2vLvjpo">Using TRIADS In GUITAR IMPROVISATION PT 1 // With PRACTICE LOOP - YouTube</a></li><li><a target="_blank" href="https://fretboardknowledge.com/guitar/kb/e-minor-backing-tracks/">E Minor Backing Tracks - Fretboard Knowledge</a></li><li><a target="_blank" href="https://www.andyfrench.co.uk/2021/09/triads-across-the-fretboard/">Triads across the fretboard - Andy French's Musical Explorations</a></li><li><a target="_blank" href="https://www.reddit.com/media?url=https%3A%2F%2Fpreview.redd.it%2F1hwyxt6areq71.png%3Fwidth%3D960%26crop%3Dsmart%26auto%3Dwebp%26s%3D58163212928dc6dbebfd8188d4ce95dc2a9b94dc">Reddit - https://preview.redd.it/1hwyxt6areq71.png?width=960&amp;crop=smart&amp;auto=webp&amp;s=58163212928dc6dbebfd8188d4ce95dc2a9b94dc</a></li><li><a target="_blank" href="https://em-pent23120522.vercel.app/EmPent23120522.html">em-pent23120522.vercel.app/EmPent23120522.html</a></li><li><a target="_blank" href="http://127.0.0.1:1025/EmPent23120522.html">127.0.0.1:1025/EmPent23120522.html</a></li><li><a target="_blank" href="http://127.0.0.1:81/">127.0.0.1:81</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=ffr6YyPND2o">Why Guitar is Easy To Pick-Up and Difficult To Master - YouTube</a></li><li><a target="_blank" href="https://support.microsoft.com/en-us/topic/usb-devices-may-stop-functioning-correctly-when-multiple-devices-connected-to-the-same-usb-hub-go-into-selective-suspend-99b5ae85-69cb-4f94-adce-5698ba44804f">USB devices may stop functioning correctly when multiple devices connected to the same USB hub go into selective suspend - Microsoft Support</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=cSz6NrFy_jc">Reality of Pan Masala Industry | Nitish Rajput | Hindi - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=I5Hwg0bDYmo">5 Theory Tricks To Save YEARS Of Guitar Practice - YouTube</a></li><li><a target="_blank" href="https://www.amazon.in/Tvs-Champ-1-CHAMP-KEYBOARD/dp/B00HD4EMDM/ref=sr_1_44?crid=2VTSWQ3S0CTUV&amp;keywords=keyboard&amp;qid=1702050200&amp;sprefix=keyb%2Caps%2C482&amp;sr=8-44&amp;th=1">Amazon.in: Buy TVS Electronics Champ Wired Keyboard (Black) Online at Low Prices in India | TVS ELECTRONICS Reviews &amp; Ratings</a></li><li><a target="_blank" href="https://www.reliancedigital.in/jiobharat-k1-karbonn-4g-keypad-phone-with-jiocinema-jiosaavn-jiopay-upi-long-lasting-battery-led-torch-digital-camera-white-red-locked-for-jionetwork/p/493071995">Buy JioBharat K1 Karbonn 4G Keypad Phone with JioCinema, JioSaavn, JioPay (UPI), Long Lasting Battery, LED Torch, Digital Camera, White &amp; Red, Locked for JioNetwork at Reliance Digital</a></li><li><a target="_blank" href="https://www.youtubemultiplier.com/">Youtube Multiplier : Mashup and mix up to 8 YouTube videos on a single page</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=z44ZUHZlZ2s">मोदी के खिलाफ क्यों बोलते हैं सम्पत सरल | Sampat Saral l| Jashn e Poetry - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=vvTUhA-8oBY">After 16 Years I Finally Discovered the Secrets to Playing Fast and Clean Guitar! - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=zATuEWn6S2g">किस गलती की वजह से चली गई Rubika Liyaquat की नौकरी ? Rubika Liyaquat resign bharat24 - YouTube</a></li><li><a target="_blank" href="https://www.facebook.com/reel/6719606061442454">Facebook - siti nostalgia</a></li><li><a target="_blank" href="https://www.dummies.com/article/academics-the-arts/music/instruments/guitar/how-to-play-the-pentatonic-scale-in-other-keys-on-the-guitar-154771/?_gl=1%2a1uozrlm%2a_gcl_au%2aODYwNzAyNzE1LjE2OTg0Mzg1Mjg.">How to Play the Pentatonic Scale in Other Keys on the Guitar - dummies</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/DPM1iyiyaVg">Easiest Way To Solo Over Chord Changes - YouTube</a></li><li><a target="_blank" href="https://www.facebook.com/photo/?fbid=750833767083361&amp;set=a.563116429188430">Ultimate AI tools sheet</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/wemKiSOvMC4?feature=share">Songs Intermediate Players Should be able to Play - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=KsI-h49KneE">My Guitar Practice Routine - How I Quickly Improved My Guitar Playing! - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=inq_bmVUFoQ&amp;t=1s">One Chord Backing Track - Pop - C Major - 80 bpm - YouTube</a></li><li><a target="_blank" href="https://www.facebook.com/reel/166384353232677">chatgpt money</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/iUrnkFoZWGY">3 tricks every rock guitarist should know - YouTube</a></li><li><a target="_blank" href="https://pastebin.com/raw/GbW0WJJk">autoit mp3 restart</a></li><li><a target="_blank" href="https://pastebin.com/raw/aAkusmsi">autoit close mp3</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=pa_dVihB7vM">Triad’s In Your Guitar Solo - YouTube</a></li><li><a target="_blank" href="https://jtcguitar.com/jtc-plus-exclusive/lesson/add-9-soloing?utm_source=Unknown+List&amp;utm_campaign=cd22b1f078-EMAIL_CAMPAIGN_2023_10_03_10_37&amp;utm_medium=email&amp;utm_term=0_-cd22b1f078-%5BLIST_EMAIL_ID%5D&amp;mc_cid=6ab3151bdf&amp;mc_eid=7ff4be0d45">JTC Guitar - Add 9 Soloing</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=O41jXvJU1xE">Instrumental Guitar ballads (Blues-Rock)(360P).mp4 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/f2mv7q1lLQ4">9 years learning in 60 seconds - via Cycusmotivation #recruiterlife #recruiter - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=lQlsTaTRM5I">How to play over a chord progression | Guitar Lessons | Iggy Di Salvo - YouTube</a></li><li><a target="_blank" href="https://www.facebook.com/reel/1260108318010251">pakistani joke</a></li><li><a target="_blank" href="https://www.amazon.in/Dettol-Sanitizer-Regular-200-Pack/dp/B076ZH5ZJL/ref=sr_1_1_sspa?keywords=sanitizer&amp;qid=1702642168&amp;sr=8-1-spons&amp;sp_csd=d2lkZ2V0TmFtZT1zcF9hdGY&amp;th=1">Dettol Original Germ Protection Alcohol based Hand Sanitizer Pump, 200ml (Pack of 3) : Amazon.in: Health &amp; Personal Care</a></li><li><a target="_blank" href="https://www.amazon.in/Amazon-Brand-Solimo-Borosilicate-Bottle/dp/B087RXCZC1/ref=sr_1_20?crid=1I3JZ0DS1QF5A&amp;keywords=glass+bottle&amp;qid=1702647646&amp;sprefix=glass+bottl%2Caps%2C267&amp;sr=8-20">Amazon Brand - Solimo Borosilicate Glass Water Bottle with Sleeve, 500 ml, Pack of 1, Transparent : Amazon.in: Home &amp; Kitchen</a></li><li><a target="_blank" href="https://www.amazon.in/dp/B0BNLGQ5ZW?pd_rd_i=B0BNLGQ5ZW&amp;pf_rd_p=aa14fa00-bc47-4b9c-afe8-e5f5a8aecc2e&amp;pf_rd_r=ND2HDR9N2ZQFX8C6ZSEF&amp;pd_rd_wg=60qWB&amp;pd_rd_w=KAlwQ&amp;pd_rd_r=a5905e94-507f-4cac-a733-c2222fe64c62">SAND DUNE Set of 1, 750 ml Each MCA Glass water bottle, with Leak-Proof Airtight Stainless-Steel Lid for Water, Smoothie, Juices - Reusable Travel Glass Drinking Fridge Bottles : Amazon.in: Home &amp; Kitchen</a></li><li><a target="_blank" href="https://claude.ai/chats">Claude</a></li><li><a target="_blank" href="https://www.imdb.com/list/ls058807510/">The most gripping tv shows - IMDb</a></li><li><a target="_blank" href="file:///D:/temptextfiles/7t2g1soakw.html">pikpak on dkraiphone</a></li><li><a target="_blank" href="file:///D:/temptextfiles/k8hgvo06bd.html">pikpak installed on win</a></li><li><a target="_blank" href="file:///D:/temptextfiles/w8319ly6ou.html">tlauncher sumit</a></li><li><a target="_blank" href="file:///D:/temptextfiles/ob9h094008.html">45277.00011574074</a></li><li><a target="_blank" href="https://truefire.com/blues-guitar-lessons/30-penta-sonic-licks/bend-&amp;-descend/v33169">Bend &amp; Descend - Lick 4 - TrueFire</a></li><li><a target="_blank" href="https://www.multishare.cz/en/cenik-kreditu?utm_source=vanocni-email&amp;utm_campaign=Vanoce-2023&amp;utm_medium=email">Price | MultiShare.cz</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=wdsxxpznecc">MINOR PENTATONIC BEDROCK RUN // PATREON #11 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=X43fcx_1Ejo&amp;t=1s">Calm Soulful Groove Guitar Backing Track Jam in C Minor - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/k3ahecmVuX0">Magical Drink for Acidity - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/qv162q1IzHQ">Never install</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=1OL1asctoZ4">Convert your Google Sheets into REST APIs in 6 Minutes 😱 (and Make Projects) - YouTube</a></li><li><a target="_blank" href="http://127.0.0.1:81/links.html">127.0.0.1:81/links.html</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=PYRMMkqn-QU">Store Up To 100MB* Of JSON Data To The Cloud For Free! - YouTube</a></li><li><a target="_blank" href="http://127.0.0.1:81/BackingJsonView.html">Backing Json</a></li><li><a target="_blank" href="https://www.perplexity.ai/">Perplexity</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=OvLaoda11fY">Stream torrent movies with Kodi without downloading them - YouTube</a></li><li><a target="_blank" href="https://app.hyperwriteai.com/personalassistant">HyperWrite</a></li><li><a target="_blank" href="https://pastebin.com/9FdZcfpE">pikpak</a></li><li><a target="_blank" href="file:///D:/temptextfiles/u9b1c4a7u9.html">u9b1c4a7u9.html</a></li><li><a target="_blank" href="https://www.google.com/search?q=ipt+king+of+the+hill+showdown+efren+ryes+vs+rodney&amp;oq=ipt+king+of+the+hill+showdown+efren+ryes+vs+rodney&amp;gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIKCAEQABiABBiiBDIKCAIQABiABBiiBNIBCTIzNTg3ajBqMagCALACAA&amp;sourceid=chrome&amp;ie=UTF-8">ipt king of the hill showdown efren ryes vs rodney - Google Search</a></li></ul>
+
+
+</body>
+</html>
