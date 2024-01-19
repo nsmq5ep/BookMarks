@@ -1,0 +1,135 @@
+<html>
+<head>
+  <title>Bookmark List</title>
+  <style id="theme">
+    /* Add CSS for aesthetics */
+    /* Add CSS for aesthetics */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #fff;
+      color: #000;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    li {
+      margin: 10px;
+      flex-grow: 1;
+      text-align: center;
+    }
+    a {
+      color: #ff0000;
+      text-decoration: none;
+      font-size: 18px;
+      display: block;
+      padding: 10px;
+      border: 1px solid #ff0000;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    a:hover {
+      background-color: #ff0000;
+      color: #fff;
+    }
+    #themeButton {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #cbf8e4;
+      border: none;
+      cursor: pointer;
+    }
+    #downloadButton {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #eed8ff;
+      border: none;
+      cursor: pointer;
+    }
+    #controlPanel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+  <script>
+    // Use jQuery to handle interactions and dynamic behavior
+    $(document).ready(function() {
+      // Add event listener for theme toggle button
+      $('#themeButton').click(function() {
+        var theme = $('#theme').html();
+        if (theme.includes('#3366cc')) {
+          $('#theme').html(theme.replace(/#3366cc/g, '#ff0000'));
+        } else {
+          $('#theme').html(theme.replace(/#ff0000/g, '#3366cc'));
+        }
+      });
+
+      // Add event listener for file input
+      $('#fileInput').change(function(e) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var data = new Uint8Array(e.target.result);
+          var workbook = XLSX.read(data, {type: 'array'});
+
+          var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          var jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+
+          jsonData.shift(); // Remove the first row
+
+          jsonData.forEach(function(row) {
+            $('ul').append('<li><a target="_blank" href="' + row[1] + '">' + row[0] + '</a></li>');
+          });
+        };
+        reader.readAsArrayBuffer(e.target.files[0]);
+      });
+
+      // Add event listener for download button
+      $('#downloadButton').click(function() {
+        $('#fileInput').hide(); // Hide the file input button in the downloaded version
+        var $clone = $('html').clone();
+        $clone.find('#controlPanel').remove();
+        var pageHtml = '<html>\n' + $clone.html() + '\n</html>';
+        pageHtml = pageHtml.replace(/<button id="fileInput".*?<\/button>/, '') // Remove file input
+          .replace(/<button id="themeButton".*?<\/button>/, '') // Remove theme button
+          .replace(/<a target="_blank" href="/g, '<a target="_blank" href="') // Make links open in a new tab
+          .replace(/<button id="downloadButton".*?<\/button>/, ''); // Remove download button
+        var blob = new Blob([pageHtml], {type: 'text/html'});
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'bookmarks.html';
+        link.click();
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>Bookmarks</h1>
+  
+  
+  <input type="file" id="fileInput" accept=".xlsx" style="display: none;">
+  <ul>
+    <!-- Links will be generated here -->
+  <li><a target="_blank" href="https://myfreemathworksheets.com/grade-5-division/">Grade 5 Division Worksheets | Free worksheets | Printables</a></li><li><a target="_blank" href="https://www.math-only-math.com/worksheet-on-word-problems-on-division.html">Worksheet on Word Problems on Division | Solve Division Problems</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=Sq2xo6dxHb8&amp;t=914s">THRILLING 8-BALL FINAL | Shane Van Boening vs Alex Pagulayan | 2017 US Open 8-Ball Championship - YouTube</a></li><li><a target="_blank" href="https://filebin.net/l8ge3owcy8pfobgs">Filebin | l8ge3owcy8pfobgs</a></li><li><a target="_blank" href="file:///G:/00templinkshtml/747937588.html">747937588.html</a></li><li><a target="_blank" href="file:///G:/00templinkshtml/286178363.html">286178363.html</a></li><li><a target="_blank" href="https://scontent.fdel8-2.fna.fbcdn.net/v/t39.30808-6/418726873_18407880490032989_1462731725055845898_n.jpg?_nc_cat=106&amp;ccb=1-7&amp;_nc_sid=3635dc&amp;_nc_ohc=_v1t4cmxqy4AX_EBBNx&amp;_nc_ht=scontent.fdel8-2.fna&amp;oh=00_AfAHeIWWd6ZTLLl10or5yjknIRfyjC4a_b8ughtDfrDkgw&amp;oe=65A296F8">418726873_18407880490032989_1462731725055845898_n.jpg (1440×1440)</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=fA4tvSY5K04">ROUND ONE | USA vs Canada | 2022 World Cup of Pool - YouTube</a></li><li><a target="_blank" href="https://www.bajaao.com/products/dunlop-ultex-sharp-picks-set-of-6?variant=10262425411">Buy Dunlop Ultex Sharp Picks - Set of 6 Online | Bajaao</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=UR9H2ZObKAQ">Escucha esto y recibirás milagros en toda tu vida - Frecuencia de Dios - Amor, Paz y Milagros - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=nAlkRlSDrn4&amp;list=PLVVk2nQ5iO8_Y447zuo5aPkdIwe3hCbw-">BAD**$ Dorian Pentatonic Licks // Wednesday Warm-up 🔥 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=npybcAb8FNc">HOW TO REMOVE ANNOYING ADOBE GENUINE SERVICE ALERT SUPER EASY AND SAFE! FIX FIX FIX !!! 100% WORKING - YouTube</a></li><li><a target="_blank" href="https://pastebin.com/raw/1kdYRx82">prompt only ray of hope for guitar</a></li><li><a target="_blank" href="https://wwv.solarmovie.one/">SolarMovie - Watch Movies and TV Shows Online for Free</a></li><li><a target="_blank" href="https://www.altadefinizione.ma/film/erotico/">Film erotico in streaming - Guardali gratis in AltaDefinizione</a></li><li><a target="_blank" href="https://drive.google.com/drive/u/6/folders/1igMEaOqanDrp0R1gy4pdYN-h1PDIKK0v">Ayaansh States Project sumitdevsys</a></li><li><a target="_blank" href="https://www.0daydown.com/01/2318493.html">LickLibrary – What Makes the Blues |百度网盘|rapidgator|nitroflare</a></li><li><a target="_blank" href="https://www.0daydown.com/11/2287877.html">Lick Library Classic Albums Pump TUTORiAL |百度网盘|rapidgator|nitroflare</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=gBIk0pxmByw">nostalgic playlist for daydreaming - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=-QaEfvpvu5k">How to unlock everything or hack NFS MOST WANTED 2012 - YouTube</a></li><li><a target="_blank" href="https://www.patreon.com/guitar_playalongs">Guitar Playalongs | creating the worlds largest archive for guitar playalong videos | Patreon</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=iyIVafaAWn0">10 MIN GUITAR PLAY-ALONG (Pentatonic Scale Workout with Tabs) - YouTube</a></li></ul>
+
+
+</body>
+</html>
