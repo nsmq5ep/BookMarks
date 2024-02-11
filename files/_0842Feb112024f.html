@@ -1,0 +1,135 @@
+<html>
+<head>
+  <title>Bookmark List</title>
+  <style id="theme">
+    /* Add CSS for aesthetics */
+    /* Add CSS for aesthetics */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #fff;
+      color: #000;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    li {
+      margin: 10px;
+      flex-grow: 1;
+      text-align: center;
+    }
+    a {
+      color: #3366cc;
+      text-decoration: none;
+      font-size: 18px;
+      display: block;
+      padding: 10px;
+      border: 1px solid #3366cc;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    a:hover {
+      background-color: #3366cc;
+      color: #fff;
+    }
+    #themeButton {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #cbf8e4;
+      border: none;
+      cursor: pointer;
+    }
+    #downloadButton {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #eed8ff;
+      border: none;
+      cursor: pointer;
+    }
+    #controlPanel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+  <script>
+    // Use jQuery to handle interactions and dynamic behavior
+    $(document).ready(function() {
+      // Add event listener for theme toggle button
+      $('#themeButton').click(function() {
+        var theme = $('#theme').html();
+        if (theme.includes('#3366cc')) {
+          $('#theme').html(theme.replace(/#3366cc/g, '#ff0000'));
+        } else {
+          $('#theme').html(theme.replace(/#ff0000/g, '#3366cc'));
+        }
+      });
+
+      // Add event listener for file input
+      $('#fileInput').change(function(e) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var data = new Uint8Array(e.target.result);
+          var workbook = XLSX.read(data, {type: 'array'});
+
+          var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          var jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+
+          jsonData.shift(); // Remove the first row
+
+          jsonData.forEach(function(row) {
+            $('ul').append('<li><a target="_blank" href="' + row[1] + '">' + row[0] + '</a></li>');
+          });
+        };
+        reader.readAsArrayBuffer(e.target.files[0]);
+      });
+
+      // Add event listener for download button
+      $('#downloadButton').click(function() {
+        $('#fileInput').hide(); // Hide the file input button in the downloaded version
+        var $clone = $('html').clone();
+        $clone.find('#controlPanel').remove();
+        var pageHtml = '<html>\n' + $clone.html() + '\n</html>';
+        pageHtml = pageHtml.replace(/<button id="fileInput".*?<\/button>/, '') // Remove file input
+          .replace(/<button id="themeButton".*?<\/button>/, '') // Remove theme button
+          .replace(/<a target="_blank" href="/g, '<a target="_blank" href="') // Make links open in a new tab
+          .replace(/<button id="downloadButton".*?<\/button>/, ''); // Remove download button
+        var blob = new Blob([pageHtml], {type: 'text/html'});
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'bookmarks.html';
+        link.click();
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>Bookmarks</h1>
+  
+  
+  <input type="file" id="fileInput" accept=".xlsx" style="display: none;">
+  <ul>
+    <!-- Links will be generated here -->
+  <li><a target="_blank" href="https://ibb.co/S7mXsP8">Ayaansh Maths Syll _1307Jan202024b</a></li><li><a target="_blank" href="https://byjus.com/cbse/class-5-maths/">Class 5 Maths Textbooks Along With CBSE Class 5 Maths Worksheets Available On BYJU'S</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=CA9XLJpQp3c&amp;list=PLUPEBWbAHUsyJkm0CwwrOdOTpT0avzW9w">Math Antics - Fractions Are Parts - YouTube</a></li><li><a target="_blank" href="https://gamma.app/signup">Gamma</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=jQDCq27FKV8">Great Legato Workout. Can You Play It? - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=_tgcZHUecXM">Country Guitar Lessons - 4 Hybrid Picking Essential Patterns - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=lR4sFOSNWjE">Alternate Picking Arpeggios Workout 1 | George Karayiannis - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/Zvw1s2F9NUM">when things come full circle 🥹 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=XrGvfzLzcAI">Letting Go In 4 Easy Steps (LIFECHANGING) | David Hawkins Method - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=Pa3BV50PcLw">Who Are Indians? | Aryan Invasion Theory Explained - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=tzMYvAjZWkk">10 SHOCKINGLY Good 2023 Movies - YouTube</a></li><li><a target="_blank" href="https://youtu.be/eI6ISUNjnt4?t=1">396 Hz</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=UmJOwNzrsec">Harmonica Lessons for Kids: Lesson 1 (train sounds, part 1) - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=WcB2r02GqlU">IBSF WORLD SNOOKER CHAMPIONSHIPS QATAR 2023 l WOMEN'S SEMI-FINAL - YouTube</a></li><li><a target="_blank" href="https://gtrainers.com/load/categories/trainers/need_for_speed_most_wanted_2012_trainer_8_1_5_fling/28-1-0-175">Need for Speed - Most Wanted (2012): Trainer (+8) [1.5] {FLiNG} - Download - GTrainers</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=GNTFWD6bKEA">ShootersPool (PC) gameplay, 9-ball match, race to 7 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=GTg3g7LyVNU">प्राण प्रतिष्ठा के बाद प्रशांत भूषण का ये वीडियो इतना क्यों वायरल हो रहा! देखिए। - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=kAM6akLr2Fc">How To Aim In Pool - Beginners Guide | Pool School - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/cXjyx6dAkvw">Dark Psychology Tricks That are a bit TOO Risky and Powerful - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=ndJUa_dNWFo">Hybrid Picking Part 1: Using a pick and fingers - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=vhnKYwCqUeU">lick library yngwie malmsteen far beyond the sun Guitar Solo - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/3AaeD8wdsZY">OSHO: Why Religions Try to Convert People - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=30el9kWGPhY">25 Best High Spec PC Games with INSANE GRAPHICS (Part 1) - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=d6RYWoNuTpQ">#1 Practice Routine to Rapidly Improve Your Guitar Playing | GuitarZoom VIP - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=kZX4DF3t1Oo">मैं कौन हूँ? ( Who Am I, a book by Swami Vivekanand ) full audiobook #spiritual #vivekananda - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=2uWRMuy8cwc">How to Use Hybrid Picking - Beginners ( Legendado) - YouTube</a></li><li><a target="_blank" href="https://pastelink.net/cxn3ehbc">hyprid combos</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=UWHYThrfRYU">"Nothing You See is Real" | Donald Hoffman - YouTube</a></li><li><a target="_blank" href="https://www.flipkart.com/hiru-2pcs-rgb-party-light-50w-led-brick-remote-ip65-flood-outdoor-lamp/p/itm938856fff2fd1?pid=OTLGFGT5HZJF5RWT&amp;lid=LSTOTLGFGT5HZJF5RWT1AQFRC&amp;marketplace=FLIPKART&amp;store=jhg%2F6w8%2Fnyc&amp;srno=b_1_10&amp;otracker=pp_reco_You%2Bmight%2Bbe%2Binterested%2Bin_2_34.dealCard.OMU_cid%3AS_F_N_jhg_6w8_nyc__d_50-100__NONE_ALL%3Bnid%3Ajhg_6w8_nyc_%3Bet%3AS%3Beid%3Ajhg_6w8_nyc_%3Bmp%3AF%3Bct%3Ad%3Bat%3ADEFAULT%3B&amp;otracker1=pp_reco_PINNED_productRecommendation%2FAugmentSelling_You%2Bmight%2Bbe%2Binterested%2Bin_BANNER_HORIZONTAL_dealCard_cc_2_NA_view-all&amp;fm=productRecommendation%2Fsimilar&amp;iid=9285e85c-9290-470d-b6b8-90508e208ad2.OTLGFGT5HZJF5RWT.SEARCH&amp;ppt=pp&amp;ppn=pp&amp;ssid=i1xxn5ecsw0000001706808281806">Hiru 2Pcs RGB Party Light - 50W RGB LED Brick Light Remote IP65 LED Flood Light Flood Light Outdoor Lamp Price in India - Buy Hiru 2Pcs RGB Party Light - 50W RGB LED Brick Light Remote IP65 LED Flood Light Flood Light Outdoor Lamp online at Flipkart.com</a></li><li><a target="_blank" href="https://ext.to/kung-fu-panda-the-dragon-knight-s03-complete-720p-nf-webrip-x264-galaxytv-12800611/">kpanda</a></li><li><a target="_blank" href="https://youtu.be/hI0lFi1JFHQ?t=1453">PINK FLOYD's ROGER WATERS FULL 54 MIN INTERVIEW UNFILTERED - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=pF_le4JtP_4">This Proves That The Entire Universe Is In Someone’s Mind…SCARY! - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=inE-r569Q5Y">PAKISTANIS ARE SAVAGE ft. @ShoaibAkhtar100mph (SPECIAL EPISODE) - YouTube</a></li><li><a target="_blank" href="https://www.amazon.in/dp/B07P7JNQ56?linkCode=spc&amp;tag=onamzkanhai08-21&amp;creativeASIN=B07P7JNQ56&amp;asc_item-id=amzn1.ideas.1ADG2RDV4NKE0&amp;ref_=aip_sf_list_spv_ofs_d_asin&amp;th=1">Wipro Next Smart Wi-Fi 20W CCT LED Batten | White Tunable | Dimmable | Scheduling | Scene Creation | Smart Grouping of Lights | Control from Anywhere |Amazon Alexa &amp; Google Asst Compatible |Pack of 1 : Amazon.in: Home &amp; Kitchen</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/rvOo3pm7S8A">[Tabs] Dire Straits - Sultans of Swing Famous Lick - YouTube</a></li><li><a target="_blank" href="https://bingwallpaper.anerg.com/detail/us/MeteorCrater_1366x768">Bing Wallpaper Archive</a></li><li><a target="_blank" href="https://bingwallpaper.anerg.com/archive/fr/201304">Bing Wallpaper Archive</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=v1ojZKWfShQ">How To Eliminate Self Doubt Forever &amp; The Power of Your Unconscious Mind | Peter Sage | TEDxPatras - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=XX30i6nC7ro">Stop Sabotaging Yourself | Debi Silber | TEDxFultonStreet - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/28vHGDZkNrI">Trying the famous Gary Moore pickup change! #shorts - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/7KHbfHmNhQk">What a tone! 🔥🔥 Gary More - Still Got The Blues #learnguitar #guitarcover #guitartab #guitartabs - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=RdAQnkDzGvc">Testing the limits of ChatGPT and discovering a dark side - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=21kiAMwlk78">LAYLA GUITAR LESSON - How To Play The Piano Outro On Guitar - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=oOcz9bl2qkg">Eric Clapton Layla guitar outro - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=xzh-JRvPX4Y">Layla - The Big Piano Exit (arr. for guitar) - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=-KZSGF0gY6E">How To EASILY Solo Over Chord Changes Like A PRO - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=R4G-gYEfImo">🔴LiVE | Best Controller Player | WARZONE NUKES ALL NIGHT - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=qd_4LmBZrVM">The Breath of Life: Never Have A Bad Day Again (For Real 🌬) - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=sTFrzf-KetA">Change your frequency, change your life (here's how) - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=G_2xL5WEdgc">Manly P. Hall: First Line of Defense Against Adversity - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/frVngkeyUPw">Beat Procrastination: The More Than Zero Approach by Vaisesika Dasa - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=svB4fqNuMxM">Manly P. Hall: RARE LECTURE VIDEO: Is There a Guardian Angel? - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=JBmv7RyC3o4">Lucid Dreaming Music So Deep (WARNING: YOU WILL MELT INTO THE ASTRAL) Theta &amp; Delta Waves - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=PB8ImX6hiJI">A Psychedelic Trip to Interconnected Realms of Consciousness - 4k UHD - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=fJdHTitq5ow">"Make everything conspire in your favor" - THE LITTLE BLUE BOOK - Conny Méndez - AUDIOBOOK - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=m3z8EMEkIQ0">"Become the person you want to be" - UNBLOCK YOUR MIND - Charles F. Haanel - AUDIOBOOK - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=14JxE7i0EPc">CHANGE YOUR THOUGHTS CHANGE YOUR LIFE, Living with the wisdom of the Dao Dr Wayne Dyer - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=l1e4DJYq0d4">Connecting Pentatonic Scales to Create Riffs and Solos on Both XYZ Records - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=R0kvPoAZBIk">Slow Drum Beat - 75 bpm - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=gKbgoUi4RoM">Hemi Sync Extended - Increase flowstate / Theta Binaural and Isochronic Beats // Frequency Tuning - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/BJiXp2t8FEA">TRUTH OF MEDIA INDUSTRY | PALKI SHARMA | GODI MEDIA - YouTube</a></li><li><a target="_blank" href="http://icecream.me/302ed31882a19ccbe01d20d31df851b8">Icecream.Me - media hosting by Icecream Apps</a></li><li><a target="_blank" href="http://icecream.me/78cbf792881ea629f74ddb926fce618b">Icecream.Me - media hosting by Icecream Apps</a></li><li><a target="_blank" href="https://www.patreon.com/andresaguero">Andres | creating guitar licks, lessons, and more | Patreon</a></li><li><a target="_blank" href="http://icecream.me/5e747a87fac5c51d2e95d4a4142d123c">Icecream.Me - media hosting by Icecream Apps</a></li><li><a target="_blank" href="https://steamcommunity.com/app/1265860/discussions/0/3775742652426595386/">NEED Keyboard? Here is how: :: NASCAR Heat 5 General Discussions</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=o2LMv4iJEZg">'Don't Believe Everything You Think' Full-Length Audiobook (From The Author) - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=I7z26d8IsUc">Proof That Reality Is An ILLUSION: The Mystery Beyond Space-Time - Donald Hoffman | Know Thyself E63 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=_VLZ4b9LHLs">This High-Income Skill Made Me $4.1 Million Last Year (Full Guide) - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/wl8UYtf8oQg">Glue Stick Projects | Glue Stick Hacks | Glue Stick LED Light | Glue RGB LED | Hot Glue Gun Light | - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=gfohQ5DbD_o">Butter Chicken का Bite लेकर क्या Sharks करेंगे Invest? | Shark Tank India Season 2 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=Res2eXxLh0Q">Dirt 3 Complete Edition Gameplay (PC HD) - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=ZqPYQYpc2_I">Did Civilization Begin in India? - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=ZAqQ-tQQEyQ">Indians | Ep 1: The Harappans | A Brief History of a Civilization - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=__BaaMfiD0Q">Timeline of World History | Major Time Periods &amp; Ages - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=gn4bvjMh4vc">A Theory You've Never Heard Of | Michael Robinson | TEDxUniversityofHartford - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=77SOyFxfUSY">Scientists CAN'T Explain Why This Audio HEALS People! 111Hz • Binaural Beats - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=QJXzCygsNiI">Scientists CAN'T Explain Why This Audio HEALS People! (10 Hours) 111Hz • Binaural Beats - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=BIGArgd_n6M">"This Trauma Therapy Can Make You Feel Free Again" by Dr. Daniel Amen - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=hKrfH43srg8">How EMDR works? Look at this animation (English) - YouTube</a></li></ul>
+
+
+</body>
+</html>
