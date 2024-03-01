@@ -1,0 +1,135 @@
+<html>
+<head>
+  <title>Bookmark List</title>
+  <style id="theme">
+    /* Add CSS for aesthetics */
+    /* Add CSS for aesthetics */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #fff;
+      color: #000;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      text-align: center;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    li {
+      margin: 10px;
+      flex-grow: 1;
+      text-align: center;
+    }
+    a {
+      color: #3366cc;
+      text-decoration: none;
+      font-size: 18px;
+      display: block;
+      padding: 10px;
+      border: 1px solid #3366cc;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    a:hover {
+      background-color: #3366cc;
+      color: #fff;
+    }
+    #themeButton {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #cbf8e4;
+      border: none;
+      cursor: pointer;
+    }
+    #downloadButton {
+      position: fixed;
+      top: 60px;
+      right: 20px;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #eed8ff;
+      border: none;
+      cursor: pointer;
+    }
+    #controlPanel {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+    }
+  </style>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+  <script>
+    // Use jQuery to handle interactions and dynamic behavior
+    $(document).ready(function() {
+      // Add event listener for theme toggle button
+      $('#themeButton').click(function() {
+        var theme = $('#theme').html();
+        if (theme.includes('#3366cc')) {
+          $('#theme').html(theme.replace(/#3366cc/g, '#ff0000'));
+        } else {
+          $('#theme').html(theme.replace(/#ff0000/g, '#3366cc'));
+        }
+      });
+
+      // Add event listener for file input
+      $('#fileInput').change(function(e) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var data = new Uint8Array(e.target.result);
+          var workbook = XLSX.read(data, {type: 'array'});
+
+          var worksheet = workbook.Sheets[workbook.SheetNames[0]];
+          var jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+
+          jsonData.shift(); // Remove the first row
+
+          jsonData.forEach(function(row) {
+            $('ul').append('<li><a target="_blank" href="' + row[1] + '">' + row[0] + '</a></li>');
+          });
+        };
+        reader.readAsArrayBuffer(e.target.files[0]);
+      });
+
+      // Add event listener for download button
+      $('#downloadButton').click(function() {
+        $('#fileInput').hide(); // Hide the file input button in the downloaded version
+        var $clone = $('html').clone();
+        $clone.find('#controlPanel').remove();
+        var pageHtml = '<html>\n' + $clone.html() + '\n</html>';
+        pageHtml = pageHtml.replace(/<button id="fileInput".*?<\/button>/, '') // Remove file input
+          .replace(/<button id="themeButton".*?<\/button>/, '') // Remove theme button
+          .replace(/<a target="_blank" href="/g, '<a target="_blank" href="') // Make links open in a new tab
+          .replace(/<button id="downloadButton".*?<\/button>/, ''); // Remove download button
+        var blob = new Blob([pageHtml], {type: 'text/html'});
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = 'bookmarks.html';
+        link.click();
+      });
+    });
+  </script>
+</head>
+<body>
+  <h1>Bookmarks</h1>
+  
+  
+  <input type="file" id="fileInput" accept=".xlsx" style="display: none;">
+  <ul>
+    <!-- Links will be generated here -->
+  <li><a target="_blank" href="https://www.youtube.com/watch?v=iWojOicqD-4">You're Seeing This Because It's Time To Wake Up - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=LCW_uLHwUzU">1Hz 11Hz 111Hz ⚜ Protection and Healing Frequency ⚜ Inner Balance - YouTube</a></li><li><a target="_blank" href="http://icecream.me/65c83d9c864f4f8ceef5c531695570d2">Icecream.Me - media hosting by Icecream Apps</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=M2QASyPyG9E">Ravindra Jadeja 🤔? &amp; Valentine Week | Top 5 'CAN DO' of the WEEK - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=aiOn4AqHtgM">Bollywood Star Ki Hui Live Debate Me Relai | Sanatani Hero Ko Daudaya Villain Ki Tarah | - YouTube</a></li><li><a target="_blank" href="file:///G:/temptextfiles/uvj9telajj.html">pikpak_0119Feb122024f</a></li><li><a target="_blank" href="http://icecream.me/21cdb37ad4ff7474f73d7c55f197bce4">Icecream.Me - media hosting by Icecream Apps</a></li><li><a target="_blank" href="http://icecream.me/f7d1aa278a99aced5301ec719f707bad">Icecream.Me - media hosting by Icecream Apps</a></li><li><a target="_blank" href="https://www.studyadda.com/question-bank/5th-class/mathematics/factors-and-multiples/factor-multiple/4546">Question Bank for 5th Class Mathematics Factors and Multiples Factor &amp; Multiple - Studyadda.com</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=xB0S6tD1i7w">LCM by short division method in English - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/XuNEKz9FLm0">How They Tricked Chat GPT To Reveal Secret Formulas - YouTube</a></li><li><a target="_blank" href="https://www.yoursavegames.com/2022/09/nfs-the-run-save-file.html">[PC] Need for Speed: The Run (100% Save Game) – YourSaveGames</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=a9vxbhli45k">When You Get Asked To Play Something 🎸 Do THIS 😲🔥 - YouTube</a></li><li><a target="_blank" href="https://looka.com/blog/logo-color-combinations/">50 Logo Color Combinations to Inspire Your Design | Looka</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=jEfbU2Ndtfw">LIVE338 | Mantro Se Bhasm Karne Wale Videshiyon Se Kyon Harte Rahe? | Open Debate Invitation To All - YouTube</a></li><li><a target="_blank" href="https://www.amazon.in/Bharat-Mein-Angrezi-Raaj-Sundarlal/dp/9353220416/ref=sr_1_1?crid=YERYDL7CT7NO&amp;dib=eyJ2IjoiMSJ9.mGXI1XqzHovkF2rJcZvjAFU2b95wu_mtHmm1pu6maiL0q_xpukq_O0p8E1ShMvkPu5obrV6cSjanI8wOaRKdOVV-YjlGgxqyvySAY6WxPaOunk73cHPpuvRoqdVbpUmVaxNiM3hkCMz61yHgroLUTHvc2vpKqN6n7gFSPKRqaWTgxT_jAcqbpnEZ3Jhq16dOWofYThGf6Ws-TOpj6ntwJg.EA6-Uemextq68JG6H4puzP7OT8ZEMYpdfaKlN9acP54&amp;dib_tag=se&amp;keywords=bharat+mein+angrezi+raj&amp;qid=1708104908&amp;sprefix=bharat+mein+angrez%2Caps%2C201&amp;sr=8-1">Bharat Mein Angrezi Raaj : Sundarlal: Amazon.in: Books</a></li><li><a target="_blank" href="https://www.amazon.in/Against-Grain-Identity-Intolerance-History/dp/9388540123/ref=sr_1_1_mod_primary_new?crid=3LR0K12PFP45S&amp;dib=eyJ2IjoiMSJ9.gI__uHMwiCKqfdc4X33tplHEz2nN1ChUjG7OtjQADcH9e0UUnTQjpTjWJLcwXg7eHPsF2KgRTY-TCv6rsGjcO4ZxRGzKHeti9ChG4z0akpFYfyl7GRnpKQeMIxQHVy7_ukZffRzIWbIq9NvlCaQOcIWMi1TDVQk1zIEJRYQW03ANgAsNoMjoP3HPHPwFRvHg.Nj3Lw268jSeB0P_PYlOdS0YdAvIN3M5ws8XvcOaN4EU&amp;dib_tag=se&amp;keywords=against+the+grain+dn+jha&amp;qid=1708104975&amp;sbo=RZvfv%2F%2FHxDF%2BO5021pAnSA%3D%3D&amp;sprefix=against+the+grain%2Caps%2C226&amp;sr=8-1">Against the Grain: Notes on Identity, Intolerance and History : D.N. Jha: Amazon.in: Books</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=XBxnMENTxO0">|राजनीतिक विमर्श | किसानों का 'दिल्ली कूच'|Moral teacher|Tuesday-9:30-pm live-70 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/lTWJhIkU0XE">When you have no enemies - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/0m7a2ryf6k0">She is the best ☝️watch here 😱 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=ilkRTK3DYas">Driveclub - PS5 Gameplay | 4K - YouTube</a></li><li><a target="_blank" href="https://funpay.freshdesk.com/en/support/tickets/8471419">[#8471419] : FunPay</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=bg2hHUQ1kHM">The Crew 2 - Options Menu - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=BH-dD2OWLBE&amp;t=319s">Pandokhar Sarkar &amp; Bageshwar Dham Ki Live Debate Me Khuli Pol | Big Expose | The Realist Azad - YouTube</a></li><li><a target="_blank" href="file:///G:/temptextfiles/aoltk99egg.html">aoltk99egg.html</a></li><li><a target="_blank" href="https://funpay.com/en/lots/offer?id=23466743">Ordering / FunPay</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=_kQ91VhIpAQ">India का पहला Live Insect Feed Company | Infiniti Insects | Shark Tank India | Unseen Full Pitch - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=9dOdfsrGNWA">🔥Top 10 Games Like Forza Horizon 5 For LOW END PC [1GB RAM, 2GB RAM, 4GB RAM] - YouTube</a></li><li><a target="_blank" href="file:///C:/Users/papa/Desktop/Screenshot_2024_02_20-1.png">Screenshot_2024_02_20-1.png (781×715)</a></li><li><a target="_blank" href="https://funpay.com/en/users/3482559/">User vladislave69 / FunPay</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=hWJoFxoO87o">सनातनी भाई ने सभी नास्तिकों का किया मुँह बंद😛 - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=aOoHrqhMXsU">20 Iconic Guitar Intros with Tabs - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/G1QLf2o0GFM">The Spirograph I enjoyed in my childhood, I've gotten a similar one for my child now. #shorts - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/PD6sTy3K3So">#science #physics #concept #shorts #short #subscribe - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=gcYHQOm3vTA">how to install NFS MW 2005 Dodi Repack with mods - YouTube</a></li><li><a target="_blank" href="http://www.skyrim-beautification-project.com/nfsmw/">Need for Speed: Most Wanted - Black Edition - HD Mod</a></li><li><a target="_blank" href="https://funpay.com/en/lots/offer?id=26249182">Ordering / FunPay</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=I0PjWq4HEho">Liquid Licks: EVH Stretched Lick - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=0IoJJwW8dBU">Behrupiya Tunni Ko Moral Teacher Sir Ne Bhayankar Rela | Pol Khulte Hi Debate Se Bhaga - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=bhEELj_3FEQ">NFSMW 2005 Reshaded 2017 Graphics Mod by Aksine - YouTube</a></li><li><a target="_blank" href="https://funpay.com/en/lots/offer?id=25542916">Ordering / FunPay</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=zjwRpq7AxX8">🎸Jackie Venson Guitar Lessons - Electric Joy - Introduction - TrueFire - YouTube</a></li><li><a target="_blank" href="https://funpay.com/en/lots/offer?id=18726317">Ordering / FunPay</a></li><li><a target="_blank" href="https://funpay.com/en/lots/offer?id=26175402">Ordering / FunPay</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=rv391AvCQ40">Angry Sanatani bhadka live debate mai. ft. Amit Tiwari - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=GA0CeSA4KCg">LIVE340 | Ye Khushamadi Pasand Bhagwan Kyon? | Open Debate Invitation To All | The Realist Azad - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=QUUUSco_RuM">Jatiwadi swami bola dalito mai dimag nahi hota l Ragad ke dhulai Ft. Amit Tiwari - YouTube</a></li><li><a target="_blank" href="https://www.patreon.com/mikesalow">Mike Salow | Guitar Lessons, Live Masterclasses, and more! | Patreon</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=ncW6TLd34ZE">Need For Speed MOST WANTED 2024 REMASTER || I Stole Razor Mustang To Defeat Him - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=2poybxu43TQ">Amit Tiwari झूठा बोला टुन्नी ft. @TheRealistAzad with @SamyakSoch#tunni #ambedkarite - YouTube</a></li><li><a target="_blank" href="https://funpay.com/en/lots/offer?id=25956390">Ordering / FunPay</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=GM9IJCeHghY">🎯212 | भड़की हुई कृष्णा भक्तिनि, SCIENCE JOURNEY से Buddh पर LIVE DEBATE करने आयी - YouTube</a></li><li><a target="_blank" href="https://gptgo.ai/en">GPTGO - ChatGPT Free combined Search Engine</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=Ew_TqNcDJdw">📞277 | भड़की सनातनी शेरनी आयी Science Journey की class लगाने | Must Watch till End | भयंकर Debate - YouTube</a></li><li><a target="_blank" href="https://www.facebook.com/reel/371894602287062">Facebook</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=zpHHYicbCJI">Sharing the life-changing advice that made my solos 10x Sexier! - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=Lssqvf0gCFo">tunni bola Krishna Maha Raslila achha hai ft.@TheRealistAzad and #amittiwari #krishna - YouTube</a></li><li><a target="_blank" href="https://funpay.com/en/lots/offer?id=15500647">Ordering / FunPay</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=vaICUuNcIr8">SJL311 | धूर्तों की जमात को Indian Constitution से क्या दिक़्क़त है? | Science Journey - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/XLWyzzHDfgk">Best soloing exercise there is #guitar #guitarmastery #guitarlesson - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=lSYKQjg_5ZQ">Far Cry 6 - Full Game Cinematic Playthrough - 4K RTX ON - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=aAg3H1LU1Yw">DEBATE Matt Dillahunty Vs Cliffe Knechtle | Is Christianity True? | Podcast - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=e6rp1ilgzfQ">2024 NEED FOR SPEED THE RUN: CHALLENGE SERIES - COASTAL RUSH - ALL PLATINUM - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=jFdWGEnYjk0">How to Free Roam Without Mods in NFS The Run - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=iUuU1MBg6Us">Need for Speed The Run | FREE ROAM MOD - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=xaBZmiK68GE">How to get rid of a sore throat fast home remedies cure - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=TzA2TsNMpVc">A BEGINNER'S GUIDE TO MINECRAFT PVP! How To Become A Pro! - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=JwIEExJayE8">How to Godbridge on ANY MOUSE. (2 CPS) - YouTube</a></li><li><a target="_blank" href="https://www.facebook.com/marketplace/item/311531068171935?ref=marketplace_profile&amp;referral_code=undefined">Marketplace – Logitech wired controller. Only serious buyers contact me. | Facebook</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=mC64952LSFQ">SJL277D | Is God Real? | Spiritualism | Dhruv rathee | Open Debate Invitation | Science Journey - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=5iU_Oq-DM-0">“Some Assembly Required”, by Jason Becker &amp; Friends - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=1ilWAMCNBW8">A Small Trick To Stay In Flow State All Day - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=atKEM5ObmRE&amp;t=1265s">Does God Exist? | Hinduism, Religion and Spirituality with Acharya Prashant x Dhruv Rathee - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=eDo1nc9HmGU">LIVE335 | Bhagwan Ram Ne Nirdosh Ahiron Ko Kyon Mara | Open Debate Invitation To All Hindus - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=FVJy5tytTH0">Need for Speed Payback Gameplay Walkthrough Part 1 - Fortune Valley (NFS Payback 2017) Full Game - YouTube</a></li><li><a target="_blank" href="https://funpay.com/en/lots/offer?id=26132466">Ordering / FunPay</a></li><li><a target="_blank" href="https://funpay.com/en/lots/offer?id=8991929">Ordering / FunPay</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=WQzWGoVtoVw">LIVEE342 | Dharmik Pakhandiyon Ko Debate Ka Open Invitation | The Realist zad - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=meSTmwR7hmY">🎯165 | स्वामी विवेकानंद का काला इतिहास | Black History of Vivekanand Part1 | Science Journey - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=Pd0UI4yu4GA">Vigyan Katha - Part 1 - Pehle Kadam - (विज्ञान के इतिहास पर हिंदी डॉक्युमेंटरी) - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=LeDm633T-_U">Man With 200 IQ Gives Theory on Reality (CTMU Explained) - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=6hB0uEEveNA">🎯257 | Galibaj Pandey पुनर्जन्म दिखाने आया | Debate me फँसते ही बौखलाया | Science Journey - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=dtZR41EmRbE">International Tunni Se Hui Issac Newton Ki Ghanghor Jhadap | Debate Me Machi BhagDad | - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/dJT5lLsIy3Y">Dan John’s FLEXIBILITY hack - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/viaZh-ScJ9Y">Singe String Sequence #yngwiemalmsteen #shorts - YouTube</a></li><li><a target="_blank" href="https://www.facebook.com/reel/3687164588221420">Facebook</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=9IF9EM7YWFE">LIVE343 | Logical Fallacies Explained By Kitaab Ghar | The Realist Azad - YouTube</a></li><li><a target="_blank" href="https://www.facebook.com/reel/2070086623373846">bill gates and chapri chaiwala</a></li><li><a target="_blank" href="https://www.facebook.com/reel/1422603828692739">Facebook mada no issue</a></li><li><a target="_blank" href="https://www.facebook.com/photo/?fbid=10152962826031675&amp;set=articlescience-meet-didnt-hear-40-years-ago-iisc-debunked-flying-claims-by-tajoh">rare book society of india</a></li><li><a target="_blank" href="https://www.youtube.com/shorts/_419z3lGxqg">Why Group B is now illegal.. 🚀 🤯 #shorts #dirtrally2 #simracing - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=RNsE36tUfwU">Are These $40 Batocera Drives Worth Buying? - 43,000 ROMs / Plug &amp; Play 🏴‍☠️ - YouTube</a></li><li><a target="_blank" href="https://www.youtube.com/watch?v=ktv-l_zZY6c">LIVE333 | Open Debate Invitation To All Sanatanis | The Realist Azad - YouTube</a></li><li><a target="_blank" href="https://www.facebook.com/watch/?v=354592527563666&amp;ref=sharing">Video | Facebook</a></li></ul>
+
+
+</body>
+</html>
